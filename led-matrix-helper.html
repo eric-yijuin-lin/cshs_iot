@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        img {
+            border: 2px solid #555;
+            max-width: 20px;
+            margin-left: 2px;
+            margin-right: 2px;
+        }
+    </style>
+</head>
+<body ondragstart="return false;" ondrop="return false;">
+
+    <h2>8 x 8 LED 陣列產生器</h2>
+    <p>請點擊或拖拉方塊以點亮/熄滅 LED，然後對應的 LED 控制數值就會顯示在下方</p>
+
+    <div id="led-matrix">
+    </div>
+    <div>
+        <p>16 進制 LED 陣列值</p>
+        <p id="hex-tupple">(0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)</p>
+    </div>
+
+    <script>
+        const ledOnImagePath = 'assets/img/on-cell.jpg';
+        const ledOffImagePath = 'assets/img/off-cell.jpg';
+        const cellMap = {};
+        let isMouseDown = false;
+        let isDragging = false;
+
+        $(document).ready(initMatrix);
+        function initMatrix() {
+            const matrixDiv = $('#led-matrix');
+            for (let y = 0; y < 8; y++) {
+                for (let x = 0; x < 8; x++) {
+                    const cellId = `cell-${x}-${y}`
+                    cellMap[cellId] = {id: cellId, x: x, y: y, turnedOn: false}
+                    appendImageElement(matrixDiv, x, y)
+                }
+                appendBr(matrixDiv);
+            }
+        }
+
+        function appendImageElement(matrixDiv, x, y) {
+            const cellId = getCellId(x, y);
+            const imgElement = $(`<img id="${cellId}" src="${ledOffImagePath}">`);
+            imgElement.click(function() {
+                toggle(x, y)
+            });
+            imgElement.mouseenter(function() {
+                hover(x, y)
+            });
+            matrixDiv.append(imgElement);
+        }
+
+        function appendBr(matrixDiv) {
+            const brElement = $('<br>');
+            matrixDiv.append(brElement);
+        }
+
+        function toggle(x, y) {
+            const cellId = getCellId(x, y);
+            const cell = cellMap[cellId];
+            cell.turnedOn = !cell.turnedOn;
+            if (cell.turnedOn) {
+                $(`#${cellId}`).attr('src', ledOnImagePath)
+            } else {
+                $(`#${cellId}`).attr('src', ledOffImagePath)
+            }
+        }
+
+        function hover(x, y) {
+            if (isDragging) {
+                toggle(x, y);
+            }
+        }
+
+        function getCellId(x, y) {
+            return `cell-${x}-${y}`;
+        }
+
+        function updateOutput() {
+            const columns = getBitColumns();
+            let hexStrings = [];
+            for (let i = 0; i < columns.length; i++) {
+                const col = columns[i];
+                const hex = getHexStringByBitColumn(col);
+                hexStrings.push(hex);
+            }
+            const output = `(${hexStrings.join(', ')})`;
+            $('#hex-tupple').text(output);
+        }
+
+        function getBitColumns() {
+            const columns = [];
+            for (let x = 0; x < 8; x++) {
+                const tempCol = []
+                for (let y = 7; y >= 0; y--) {
+                    const cellId = getCellId(x, y);
+                    const cell = cellMap[cellId];
+                    if (cell.turnedOn) {
+                        tempCol.push(1);
+                    } else {
+                        tempCol.push(0);
+                    }
+                    
+                }
+                columns.push(tempCol);
+            }
+            return columns;
+        }
+
+        function getHexStringByBitColumn(column) {
+            let sum = 0;
+            for (let i = 0; i < column.length; i++) {
+                sum += column[i] << (7-i);
+            }
+            return sum
+                .toString(16)
+                .padStart(2, '0')
+                .toUpperCase();
+        }
+
+        $('#led-matrix')
+        .mousedown(function() {
+            isMouseDown = true;
+        })
+        .mousemove(function() {
+            if (isMouseDown) {
+                isDragging = true;
+            }
+        })
+        .mouseup(function() {
+            isMouseDown = false;
+            isDragging = false;
+            setTimeout(() => {
+                updateOutput();
+            }, 100);
+        });
+    </script>
+
+</body>
+</html>
