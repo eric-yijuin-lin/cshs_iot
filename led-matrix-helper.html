@@ -117,7 +117,7 @@
             for (let i = 0; i < column.length; i++) {
                 sum += column[i] << (7-i);
             }
-            return sum
+            return '0x' + sum
                 .toString(16)
                 .padStart(2, '0')
                 .toUpperCase();
