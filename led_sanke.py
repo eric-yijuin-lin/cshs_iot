@@ -105,6 +105,27 @@ class LedMap:
                 else:
                     row.append('O')
             print(row)
+    def get_bit_columns(self):
+        columns = []
+        for x in range(8):
+            tempCol = []
+            for y in range(7, -1, -1):
+                led = self.led_map[y][x]
+                tempCol.append(led)
+            columns.append(tempCol)
+        return columns
+    def get_column_sum(self, column):
+        value_sum = 0
+        for i in range(8):
+            value_sum += column[i] << (7 - i)
+        return value_sum
+    def get_map_as_tuple(self):
+        columns = self.get_bit_columns()
+        result = []
+        for col in columns:
+            column_sum = self.get_column_sum(col)
+            result.append(column_sum)
+        return tuple(result)
     
 snake = Snake()
 led_map = LedMap()
@@ -113,7 +134,7 @@ while True:
     led_map.clear()
     if food_position is None:
         food_position = led_map.new_food_position(snake)
-    
+
     if keyboard.is_pressed('up'):
         snake.turn_up()
     if keyboard.is_pressed('down'):
@@ -131,3 +152,10 @@ while True:
     led_map.set_food_led(food_position)
     led_map.show()
     time.sleep(0.1)
+    # map_tuple = led_map.get_map_as_tuple()
+    # print(map_tuple)
+    # for num in map_tuple:
+    #     print(hex(num), end=', ')
+    # print()
+    # input('debug')
+
