@@ -20,7 +20,7 @@
     </div>
     <div>
         <p>16 進制 LED 陣列值</p>
-        <p id="hex-tupple">(0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)</p>
+        <p id="hex-tupple">[0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]</p>
     </div>
 
     <script>
@@ -89,7 +89,7 @@
                 const hex = getHexStringByBitColumn(col);
                 hexStrings.push(hex);
             }
-            const output = `(${hexStrings.join(', ')})`;
+            const output = `[${hexStrings.join(', ')}]`;
             $('#hex-tupple').text(output);
         }
 
