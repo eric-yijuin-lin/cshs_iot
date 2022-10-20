@@ -3,11 +3,20 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
-        img {
+        .led {
             border: 2px solid #555;
-            max-width: 20px;
-            margin-left: 2px;
-            margin-right: 2px;
+            width: 20px;
+            height: 20px;
+            margin: 2px;
+        }
+        .led-on {
+            background-color: rgb(255, 45, 45);
+        }
+        .led-off {
+            background-color: rgb(255, 255, 255);
+        }
+        .led-row {
+            display: flex;
         }
     </style>
 </head>
@@ -34,30 +43,31 @@
         function initMatrix() {
             const matrixDiv = $('#led-matrix');
             for (let y = 0; y < 8; y++) {
+                appendLedRowDiv(matrixDiv, y);
                 for (let x = 0; x < 8; x++) {
-                    const cellId = `cell-${x}-${y}`
+                    const rowElement = $(`#led-row-${y}`);
+                    const cellId = `cell-${x}-${y}`;
                     cellMap[cellId] = {id: cellId, x: x, y: y, turnedOn: false}
-                    appendImageElement(matrixDiv, x, y)
+                    appendLedCellElement(rowElement, x, y)
                 }
-                appendBr(matrixDiv);
             }
         }
 
-        function appendImageElement(matrixDiv, x, y) {
+        function appendLedCellElement(ledRowDiv, x, y) {
             const cellId = getCellId(x, y);
-            const imgElement = $(`<img id="${cellId}" src="${ledOffImagePath}">`);
+            const imgElement = $(`<div id="${cellId}" class="led led-off">`);
             imgElement.click(function() {
-                toggle(x, y)
+                toggle(x, y);
             });
             imgElement.mouseenter(function() {
-                hover(x, y)
+                hover(x, y);
             });
-            matrixDiv.append(imgElement);
+            ledRowDiv.append(imgElement);
         }
 
-        function appendBr(matrixDiv) {
-            const brElement = $('<br>');
-            matrixDiv.append(brElement);
+        function appendLedRowDiv(matrixDiv, rowNum) {
+            const ledRowDiv = $(`<div id="led-row-${rowNum}" class="led-row">`);
+            matrixDiv.append(ledRowDiv);
         }
 
         function toggle(x, y) {
@@ -65,9 +75,11 @@
             const cell = cellMap[cellId];
             cell.turnedOn = !cell.turnedOn;
             if (cell.turnedOn) {
-                $(`#${cellId}`).attr('src', ledOnImagePath)
+                $(`#${cellId}`).removeClass("led-off");
+                $(`#${cellId}`).addClass("led-on");
             } else {
-                $(`#${cellId}`).attr('src', ledOffImagePath)
+                $(`#${cellId}`).removeClass("led-on");
+                $(`#${cellId}`).addClass("led-off");
             }
         }
 
