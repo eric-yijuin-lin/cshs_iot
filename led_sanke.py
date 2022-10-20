@@ -109,7 +109,7 @@ class LedMap:
         columns = []
         for x in range(8):
             tempCol = []
-            for y in range(7, -1, -1):
+            for y in range(8):
                 led = self.led_map[y][x]
                 tempCol.append(led)
             columns.append(tempCol)
