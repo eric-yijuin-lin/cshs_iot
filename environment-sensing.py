@@ -3,14 +3,15 @@ from dht import DHT11
 from machine import Pin, ADC, SoftI2C
 from esp8266_i2c_lcd import I2cLcd
 
-# 建立 LCD 顯示器變數（工具）
-i2c_addr = 0x27 # 顯示器的 I2C 通訊介面位址
-soft_i2c = SoftI2C(scl=Pin(5), sda=Pin(4)) # 建立 I2C 通訊工具 
-lcd = I2cLcd(soft_i2c, i2c_addr, 2, 16) # 建立 2 x 16 格的 LCD 顯示器工具
+# 建立用來感測溫濕度的工具變數
 d5 = Pin(14) # 使用 D5 接角準備接收溫溼度感測器的數據
 dht = DHT11(d5) # 使用 D5 接腳建立溫溼度感測工具的變數
 adc = ADC(0) # 使用 A0 接腳建立「類比（Analog）」訊號接腳變數
-led = Pin(2, Pin.OUT, value=1) # 建立代表 on-board（燒在開發板上的）LED 的接腳變數
+
+# 建立用來操縱 LCD 顯示器的工具變數
+i2c_addr = 0x27 # 顯示器的 I2C 通訊介面位址
+soft_i2c = SoftI2C(scl=Pin(5), sda=Pin(4)) # 建立 I2C 通訊工具 
+lcd = I2cLcd(soft_i2c, i2c_addr, 2, 16) # 建立 2 x 16 格的 LCD 顯示器工具
 
 # 自訂義的函式，函式名稱為 lcd_show，並可以傳入兩個參數：text 與 clear
 # def 關鍵字用來告訴 Python，我們要開始定義函式了
@@ -30,7 +31,9 @@ while True:
         temperature = dht.temperature()
         soil_moisture = adc.read()
         
-        print(f"相對溼度：{humidity}    氣溫：{temperature}    土壤濕度：{soil_moisture}")
+        print(f"相對溼度：{humidity}", end=", ")
+        print(f"氣溫：{temperature}", end=", ")
+        print(f"土壤濕度：{soil_moisture}")
         lcd_show(f"RH:{humidity} T:{temperature}C \nSoil:{soil_moisture}")
     except Exception as ex:
         print(ex)
