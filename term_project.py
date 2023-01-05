@@ -28,9 +28,9 @@ def lcd_show(text, clear=True):
     lcd.putstr(text) # lcd.putstr("文字") 會把 "文字" 秀在 LCD 顯示器上
 
 # 設定 wifi SSID 名稱、wifi 密碼與伺服器網址
-WIFI_SSID = 'iPhone-YJL'
-WIFI_PASSWORD = '12345678'
-SERVER_URL = 'https://api.thingspeak.com/update?api_key=JF5LE1V27O8K5U11'
+WIFI_SSID = '你的 wifi SSID'
+WIFI_PASSWORD = '你的 wifi 密碼'
+SERVER_URL = 'https://api.thingspeak.com/update?api_key=你的 ThingSpeak 通行鑰匙'
 
 # 建立 wifi 連線
 wifi = network.WLAN(network.STA_IF)
