@@ -5,16 +5,6 @@ from flask import Flask, request, render_template
 
 app = Flask(__name__)
 DATA_FOLDER = "D:/CshsTempData"
-# file_paths = {
-#     "cshs_voltage": "D:/CshsTempData/cshs_voltage.csv",
-#     "cshs_voltage_2": "D:/CshsTempData/cshs_voltage_2.csv",
-#     "cshs_voltage_3": "D:/CshsTempData/cshs_voltage_3.csv",
-#     "cshs_voltage_4": "D:/CshsTempData/cshs_voltage_4.csv",
-#     "cshs_voltage_5": "D:/CshsTempData/cshs_voltage_5.csv",
-#     "cshs_voltage_6": "D:/CshsTempData/cshs_voltage_6.csv",
-#     "cshs_voltage_7": "D:/CshsTempData/cshs_voltage_7.csv",
-#     "cshs_voltage_8": "D:/CshsTempData/cshs_voltage_8.csv",
-# }
 row_counts = {
     "cshs_voltage": 1,
     "cshs_voltage_2": 1,
@@ -39,7 +29,8 @@ def hello():
 
 @app.route("/cshs_voltage",methods=["GET"])
 def add_voltage():
-    timestamp = datetime.now().timestamp()
+    datetime_now = datetime.now()
+    timestamp = datetime_now.timestamp()
     event_name = request.args.get('name')
     voltage = request.args.get('v')
     status_code = 0
@@ -53,7 +44,7 @@ def add_voltage():
             f.close()
             row_counts[event_name] += 1
             status_code = 200
-            message = f'saved voltage row: [{event_name}: {timestamp}, {voltage}]'
+            message = f'saved voltage row: [{event_name}: {datetime_now}, {timestamp}, {voltage}]'
             break
         except Exception as ex:
             status_code = 500
