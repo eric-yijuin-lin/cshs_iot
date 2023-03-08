@@ -1,10 +1,10 @@
 import os
 from distutils.dir_util import copy_tree, remove_tree
 
-# DATA_FOLDER = "C:/Users/user/Documents/python_project/TempData"
-# OUTPUT_FOLDER = "C:/Users/user/Documents/python_project/TempDataCopy"
-DATA_FOLDER = "D:/CshsTempData"
-OUTPUT_FOLDER = "D:/CshsTempDataCopy"
+DATA_FOLDER = "C:/Users/user/Documents/python_project/TempData"
+OUTPUT_FOLDER = "C:/Users/user/Documents/python_project/TempDataCopy"
+# DATA_FOLDER = "D:/CshsTempData"
+# OUTPUT_FOLDER = "D:/CshsTempDataCopy"
 
 if not os.path.exists(DATA_FOLDER):
     os.mkdir(DATA_FOLDER)
