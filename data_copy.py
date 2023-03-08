@@ -25,6 +25,7 @@ while True:
         try:
             remove_tree(OUTPUT_FOLDER)
             copy_tree(DATA_FOLDER, OUTPUT_FOLDER)
+            print(f"成功複製數據到 {OUTPUT_FOLDER}")
         except Exception as ex:
             print(str(ex))
             break
