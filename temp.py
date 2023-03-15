@@ -40,7 +40,7 @@ def add_voltage():
         try:
             file_path = get_file_name(event_name, row_counts[event_name])
             f = open(file_path, "a+")
-            f.write(f"{event_name},{timestamp}, {voltage}\n")
+            f.write(f"{event_name},{datetime_now},{timestamp},{voltage}\n")
             f.close()
             row_counts[event_name] += 1
             status_code = 200
